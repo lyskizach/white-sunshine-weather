@@ -1,0 +1,40 @@
+:root {
+    --lightblue: #00bfff;
+    --navy: #000080;
+    --ghostwhite: #f8f8ff;
+}
+
+body {
+    background-color: var(--ghostwhite);
+}
+
+h1 {
+    display:flex;
+    justify-content: center;
+    font-size: 50px;
+    background-color: var(--lightblue);
+}
+
+.search-bar {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    align-content: left;
+    max-width: 25%;
+}
+
+.search-btn {
+    background-color: var(--navy);
+    color: var(--ghostwhite);
+}
+
+.search-btn:hover {
+    opacity: 75%;
+}
+
+.weather-forecast {
+    display: flex;
+    justify-content: center;
+    max-width: 75%;
+    align-content: flex-end;
+}
