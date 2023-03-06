@@ -1,7 +1,7 @@
 :root {
     --lightblue: #00bfff;
     --lightbluefade: #68f5ff;
-    --navy: #000080;
+    --navy: #141454;
     --ghostwhite: #f8f8ff;
     --gray: #888888;
 }
@@ -36,21 +36,26 @@ h2 {
     flex-direction: column;
     flex-wrap: wrap;
     align-content: left;
-    min-width: 25%;
-    max-height:75%;
-    background-color: var(--lightblue);
-    padding:5px;
-    border-radius: 5px;
-}
-
-.search-bar:hover {
-    transition-duration: 2s;
-    background-color: var(--lightbluefade);
+    min-width: 33%;
+    padding: 5px;
+    border: 2px solid #000000;
+    margin-bottom: 5px;
 }
 
 .search-btn {
-    background-color: var(--navy);
+    background-color: var(--lightblue);
     color: var(--ghostwhite);
+}
+
+
+.list-btn {
+    background-color: var(--gray);
+    color: #000000;
+    margin: 5px 0px 5px 0px;
+}
+
+.list-btn:hover {
+    opacity: 75%;
 }
 
 .search-btn:hover {
@@ -58,19 +63,16 @@ h2 {
 }
 
 .weather-forecast {
-    max-width: 75%;
+    min-width: 50%;
+    max-width: 66%;
     max-height: 75%;
     height: 200px;
-    background-color: var(--lightblue);
-    border-radius: 5px;
+    border: 2px solid #000000;
     list-style-type: none;
     flex-wrap: wrap;
     padding: 5px;
-}
-
-.weather-forecast:hover {
-    transition-duration: 2s;
-    background-color: var(--lightbluefade);
+    margin-bottom:5px;
+    content:contain;
 }
 
 .weather-forecast ul {
@@ -87,18 +89,23 @@ h2 {
     justify-content: space-around;
     flex-wrap: wrap;
     margin-top: 10px;
-    background-color: var(--navy);
     max-width:100%;
     border-radius:5px;
-    color: #f8f8ff;
+    color: #000000;
 }
 
 .five-day-forecast ul {
     list-style-type: none;
-    background-color: var(--gray);
+    background-color: var(--navy);
     width: 100px;
-    height: 150px;
+    height: 200px;
     border-radius: 5px;
     contain: content;
     min-width:20%;
+    color:#f8f8ff;
+}
+
+.five-day-forecast ul li {
+    margin-left: -25px;
+    margin-top: 15px;
 }

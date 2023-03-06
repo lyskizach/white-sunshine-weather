@@ -1,8 +1,11 @@
-var cityList = $("#city-list");
+var cityList = $(".search-bar");
 var searchBtn = $(".search-btn");
-var lat = ""
-var lon = ""
 var APIKey = "&appid=362ea2014f8c6d8ee9ac4f298c7c1dca";
+var currentCity = document.getElementById("current-city");
+var temp = document.getElementById("temp");
+var wind = document.getElementById("wind");
+var humidity = document.getElementById("humidity");
+
 
 $(".search-btn").on("click", getWeatherData);
 
@@ -12,32 +15,48 @@ function getWeatherData() {
        alert("Please enter a city to search")
        return;
     }
-    cityList.append('<li>' + inputCity)
-    $('input[name="search-input"]').val("");
-
-    
-    var requestURL = "https://api.openweathermap.org/data/2.5/forecast?q=" + inputCity + "&appid=362ea2014f8c6d8ee9ac4f298c7c1dca";
+        
+    var requestURL = "https://api.openweathermap.org/data/2.5/forecast?q=" + inputCity + "&appid=362ea2014f8c6d8ee9ac4f298c7c1dca" + "&units=imperial";
     fetch(requestURL)
     .then(function (response) {
-        return response.json();
+        if(response.status === 200) {
+            $('input[name="search-input"]').val("");
+            return response.json();
+        }
+        else if(response.status !== 200) {
+            $('input[name="search-input"]').val("");
+            alert("There was an error finding that city, please try again");
+        }
         })
     .then(function (data) {
-        console.log(data);
         var lat = data.city.coord.lat;
         var lon = data.city.coord.lon;
-        //console.log(lat);
-        //console.log(lon);
-        // I have repeated myself here to follow the guidelines of the Module
-        // however, the first fetch already provides weather forecast and this next fetch is unnecessary :)
-
-        var getWetURL = "https://api.openweathermap.org/data/2.5/forecast?lat=" + lat + "&lon=" + lon + "&appid=362ea2014f8c6d8ee9ac4f298c7c1dca";
-        fetch(getWetURL)
+        var currentWetURL = "https://api.openweathermap.org/data/2.5/weather?lat=" + lat + "&lon=" + lon + APIKey + "&units=imperial";
+        var getFWetURL = "https://api.openweathermap.org/data/2.5/forecast?lat=" + lat + "&lon=" + lon + APIKey + "&units=imperial";
+// this sets current weather box at top 
+        fetch(currentWetURL)
+        .then(function (response) {
+            return response.json();
+        })
+        .then(function (data) {
+            //console.log(data);
+            cityList.append("<button class='list-btn'>" + data.name);
+            currentCity.textContent = data.name + ", " + "TODAY";
+            temp.textContent = "Temperature: " + data.main.feels_like + "Degree";
+            wind.textContent = "Wind: " + data.wind.speed + "MPH";
+            humidity.textContent = "Humidity: " + data.main.humidity + "%";
+        })
+// this sets 5 day forecast
+        fetch(getFWetURL)
         .then(function (response) {
             return response.json();
         })
         .then(function (data) {
             console.log(data);
+
         })
     
     })
+    
+
 }
