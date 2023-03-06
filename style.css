@@ -71,7 +71,7 @@ h2 {
     max-width: 66%;
     max-height: 75%;
     height: 200px;
-    border: 2px solid #000000;
+    border: 10px solid #000000;
     list-style-type: none;
     flex-wrap: wrap;
     padding: 5px;
@@ -100,6 +100,10 @@ h2 {
     border-radius: 10px;
     color: #000000;
     opacity:70%;
+}
+
+.five-day-forecast h2 {
+    font-size: 30px;
 }
 
 .five-day-forecast ul {

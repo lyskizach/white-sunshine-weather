@@ -40,7 +40,7 @@ function getWeatherData() {
         })
         .then(function (data) {
             //console.log(data);
-            cityList.append("<button class='list-btn'>" + data.name);
+            cityList.append("<button id='list-btn'>" + data.name);
             currentCity.textContent = data.name + ", " + "TODAY";
             temp.textContent = "Temperature: " + data.main.feels_like + "Degree";
             wind.textContent = "Wind: " + data.wind.speed + "MPH";
@@ -57,6 +57,5 @@ function getWeatherData() {
         })
     
     })
-    
 
 }
