@@ -7,7 +7,9 @@ var wind = document.getElementById("wind");
 var humidity = document.getElementById("humidity");
 
 
+
 $(".search-btn").on("click", getWeatherData);
+
 
 function getWeatherData() {
     var inputCity = $('input[name="search-input"]').val();
@@ -46,13 +48,24 @@ function getWeatherData() {
             var input = utc + (1000 * data.timezone);
             var today = new Date(input).toString();
             var newtoday = today.replace("GMT-0800 (Pacific Standard Time)", "");
-            //.format("dddd, MMMM D YYYY");
+            // appends this button into html element
+            var button = document.createElement("button");
+            var buttontxt = document.createTextNode(data.name);
+            button.appendChild(buttontxt);
+            button.classList.add("list-btn");
+            cityList.append(button);
+            console.log(buttontxt.data);
+            var listBtn = $(".list-btn");
+            listBtn.on("click", displayData);
             // sets the large display of current date and local time
-            cityList.append("<button id='list-btn'>" + data.name);
             currentCity.textContent = data.name + " - " + newtoday;
             temp.textContent = "Temperature: " + data.main.feels_like + " Degree";
             wind.textContent = "Wind: " + data.wind.speed + " MPH";
             humidity.textContent = "Humidity: " + data.main.humidity + "%";
+            //saves latitiude and longitude of city name
+            localStorage.setItem(data.name + "lat", lat);
+            localStorage.setItem(data.name + "lon", lon);
+            
         })
 // this sets 5 day forecast
         fetch(getFWetURL)
@@ -68,7 +81,7 @@ function getWeatherData() {
 
 }
 
-function checkStoredData() {
-    localStorage.getItem("saved");
-}
 
+function displayData() {
+    alert("hi");
+}
