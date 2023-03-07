@@ -39,11 +39,19 @@ function getWeatherData() {
             return response.json();
         })
         .then(function (data) {
-            //console.log(data);
+            d = new Date();
+            localTime = d.getTime();
+            localOffset = d.getTimezoneOffset() * 60000;
+            utc = localTime + localOffset;
+            var input = utc + (1000 * data.timezone);
+            var today = new Date(input).toString();
+            var newtoday = today.replace("GMT-0800 (Pacific Standard Time)", "");
+            //.format("dddd, MMMM D YYYY");
+            // sets the large display of current date and local time
             cityList.append("<button id='list-btn'>" + data.name);
-            currentCity.textContent = data.name + ", " + "TODAY";
-            temp.textContent = "Temperature: " + data.main.feels_like + "Degree";
-            wind.textContent = "Wind: " + data.wind.speed + "MPH";
+            currentCity.textContent = data.name + " - " + newtoday;
+            temp.textContent = "Temperature: " + data.main.feels_like + " Degree";
+            wind.textContent = "Wind: " + data.wind.speed + " MPH";
             humidity.textContent = "Humidity: " + data.main.humidity + "%";
         })
 // this sets 5 day forecast
@@ -59,3 +67,8 @@ function getWeatherData() {
     })
 
 }
+
+function checkStoredData() {
+    localStorage.getItem("saved");
+}
+
