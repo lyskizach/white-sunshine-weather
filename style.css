@@ -8,6 +8,10 @@
     --purple: #9977d1;
 }
 
+.hide {
+    display:none;
+}
+
 body {
     background-image: url("backgroundimg.jpg");
     color:#f8f8ff;
