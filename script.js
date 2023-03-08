@@ -5,8 +5,7 @@ var currentCity = document.getElementById("current-city");
 var temp = document.getElementById("temp");
 var wind = document.getElementById("wind");
 var humidity = document.getElementById("humidity");
-
-
+var listBtn = "";
 
 $(".search-btn").on("click", getWeatherData);
 
@@ -17,7 +16,6 @@ function getWeatherData() {
        alert("Please enter a city to search")
        return;
     }
-        
     var requestURL = "https://api.openweathermap.org/data/2.5/forecast?q=" + inputCity + "&appid=362ea2014f8c6d8ee9ac4f298c7c1dca" + "&units=imperial";
     fetch(requestURL)
     .then(function (response) {
@@ -40,7 +38,7 @@ function getWeatherData() {
         .then(function (response) {
             return response.json();
         })
-        .then(function (data) {
+        .then(function update (data) {
             d = new Date();
             localTime = d.getTime();
             localOffset = d.getTimezoneOffset() * 60000;
@@ -51,12 +49,14 @@ function getWeatherData() {
             // appends this button into html element
             var button = document.createElement("button");
             var buttontxt = document.createTextNode(data.name);
+            //var className = data.name;
             button.appendChild(buttontxt);
-            button.classList.add("list-btn");
+            button.classList.add("list-btn", data.name);
             cityList.append(button);
             console.log(buttontxt.data);
-            var listBtn = $(".list-btn");
+            listBtn = $(".list-btn");
             listBtn.on("click", displayData);
+            
             // sets the large display of current date and local time
             currentCity.textContent = data.name + " - " + newtoday;
             temp.textContent = "Temperature: " + data.main.feels_like + " Degree";
@@ -67,21 +67,28 @@ function getWeatherData() {
             localStorage.setItem(data.name + "lon", lon);
             
         })
-// this sets 5 day forecast
+        // this sets 5 day forecast
         fetch(getFWetURL)
         .then(function (response) {
             return response.json();
         })
         .then(function (data) {
             console.log(data);
-
         })
+        // display data upon click event for saved locations
+        function displayData() {
+            if(this.target === data.name) {
+                console.log("success");
+                
+            }
+        }
+
     
     })
 
 }
 
 
-function displayData() {
-    alert("hi");
-}
+
+
+
