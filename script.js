@@ -6,7 +6,6 @@ var temp = document.getElementById("temp");
 var wind = document.getElementById("wind");
 var humidity = document.getElementById("humidity");
 var listBtn = "";
-//const myData = JSON.parse(localStorage.getItem("savedData"));
 var savedData = "";
 
 
@@ -71,8 +70,8 @@ function getWeatherData() {
         .then(function (response) {
             return response.json();
         })
+        // need to add a reset to clear the data!!
         .then(function (data) {
-            console.log(data);
             for(i=0; i<5; i++) {
                 var forecastDay = document.createElement("div");
                 forecastDay.classList.add("day");
