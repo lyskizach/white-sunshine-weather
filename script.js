@@ -8,8 +8,9 @@ var humidity = document.getElementById("humidity");
 var listBtn = "";
 var savedData = "";
 
-
+saveBtns();
 $(".search-btn").on("click", getWeatherData);
+
 
 
 function getWeatherData() {
@@ -51,6 +52,7 @@ function getWeatherData() {
             // appends this button into html element
             var button = document.createElement("button");
             button.textContent = data.name;
+            localStorage.setItem("city", data.name);
             button.classList.add("list-btn");
             button.setAttribute("lat", lat);
             button.setAttribute("lon", lon);
@@ -58,14 +60,11 @@ function getWeatherData() {
             // for the listed items
             listBtn = $(".list-btn");
             listBtn.on("click", savedWeather);
-            
             // sets the large display of current date and local time
             currentCity.textContent = data.name + " - " + newtoday;
             temp.textContent = "Temperature: " + data.main.feels_like + " Degree";
             wind.textContent = "Wind: " + data.wind.speed + " MPH";
             humidity.textContent = "Humidity: " + data.main.humidity + "%";
-            //saves latitiude and longitude of city name
-            //localStorage.setItem("savedData", JSON.stringify(savedData));
         })
         // this sets 5 day forecast
         fetch(getFWetURL)
@@ -77,6 +76,7 @@ function getWeatherData() {
             for(i=0; i<5; i++) {
                 var forecastDay = document.createElement("div");
                 forecastDay.classList.add("day");
+                //forecastDay.setAttribute("lat", lat);
                 var listed = document.createElement("ul");
                 forecastDay.append(listed);
                 var date = document.createElement("li");
@@ -99,18 +99,12 @@ function getWeatherData() {
     })
 
 }
-//const items = { ...localStorage };
-//console.log(items);
 
-// display data upon click event for saved location
-// need to connect lat and lon to the city name and buttons
+// displays data upon click event for saved location
 function savedWeather(event) {
     var lat = event.target.getAttribute("lat");
     var lon = event.target.getAttribute("lon");
     var getFWetURL = "https://api.openweathermap.org/data/2.5/forecast?lat=" + lat + "&lon=" + lon + APIKey + "&units=imperial";
-    //console.log(lat);
-    //console.log(lon);
-    // splice the lat and lon to get each value
     var currentWetURL = "https://api.openweathermap.org/data/2.5/weather?lat=" + lat + "&lon=" + lon + APIKey + "&units=imperial";
         fetch(currentWetURL)
         .then(function (response) {
@@ -134,6 +128,7 @@ function savedWeather(event) {
             return response.json();
         })
         // need to add a reset to clear the data!!
+        // use attribute to check if the div already exists?
         .then(function (data) {
             for(i=0; i<5; i++) {
                 var forecastDay = document.createElement("div");
@@ -156,4 +151,34 @@ function savedWeather(event) {
             }
         })
 }
-
+// access the local storage and create buttons upon inital load or refresh
+function saveBtns() {
+    var city = localStorage.getItem("city");
+    var requestURL = "https://api.openweathermap.org/data/2.5/forecast?q=" + city + "&appid=362ea2014f8c6d8ee9ac4f298c7c1dca" + "&units=imperial";
+    fetch(requestURL)
+    .then(function (response) {
+        return response.json();
+    })
+    .then(function (data) {
+        var lat = data.city.coord.lat;
+        var lon = data.city.coord.lon;
+        var currentWetURL = "https://api.openweathermap.org/data/2.5/weather?lat=" + lat + "&lon=" + lon + APIKey + "&units=imperial";
+        fetch(currentWetURL)
+        .then(function (response) {
+            return response.json();
+        })
+        .then(function (data) {
+            var button = document.createElement("button");
+            button.setAttribute("lat", lat);
+            button.setAttribute("lon", lon);
+            button.textContent = data.name;
+            localStorage.setItem("city", data.name);
+            button.classList.add("list-btn");
+            button.setAttribute("lat", lat);
+            button.setAttribute("lon", lon);
+            cityList.append(button);
+            listBtn = $(".list-btn");
+            listBtn.on("click", savedWeather);
+        })
+    })
+}
