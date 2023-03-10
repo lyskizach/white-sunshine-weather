@@ -58,9 +58,13 @@ h2 {
 
 .search-btn {
     background-color: var(--lightblue);
-    color: var(--ghostwhite);
+    color: #000000;
 }
 
+.search-btn:hover {
+    box-shadow: 0px 0px 7px var(--lightblue);
+    font-weight: bold;
+}
 
 .list-btn {
     background-color: var(--purple);
@@ -73,10 +77,6 @@ h2 {
 .list-btn:hover {
     box-shadow: 0px 0px 7px var(--purple);
     font-weight: bold;
-}
-
-.search-btn:hover {
-    opacity: 75%;
 }
 
 .weather-forecast {
