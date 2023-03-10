@@ -52,6 +52,8 @@ function getWeatherData() {
             var button = document.createElement("button");
             button.textContent = data.name;
             button.classList.add("list-btn");
+            button.setAttribute("lat", lat);
+            button.setAttribute("lon", lon);
             cityList.append(button);
             // for the listed items
             listBtn = $(".list-btn");
@@ -102,13 +104,17 @@ function getWeatherData() {
 
 // display data upon click event for saved location
 // need to connect lat and lon to the city name and buttons
-function savedWeather() {
-    //console.log(JSON.parse(localStorage.getItem("savedData")));
+function savedWeather(event) {
+    var lat = event.target.getAttribute("lat");
+    var lon = event.target.getAttribute("lon");
+    var getFWetURL = "https://api.openweathermap.org/data/2.5/forecast?lat=" + lat + "&lon=" + lon + APIKey + "&units=imperial";
+    //console.log(lat);
+    //console.log(lon);
     // splice the lat and lon to get each value
     var currentWetURL = "https://api.openweathermap.org/data/2.5/weather?lat=" + lat + "&lon=" + lon + APIKey + "&units=imperial";
-    fetch(currentWetURL)
+        fetch(currentWetURL)
         .then(function (response) {
-            return response.json();
+             return response.json();
         })
         .then(function update (data) {
             d = new Date();
@@ -122,6 +128,32 @@ function savedWeather() {
             temp.textContent = "Temperature: " + data.main.feels_like + " Degree";
             wind.textContent = "Wind: " + data.wind.speed + " MPH";
             humidity.textContent = "Humidity: " + data.main.humidity + "%";
-})
+         })
+         fetch(getFWetURL)
+        .then(function (response) {
+            return response.json();
+        })
+        // need to add a reset to clear the data!!
+        .then(function (data) {
+            for(i=0; i<5; i++) {
+                var forecastDay = document.createElement("div");
+                forecastDay.classList.add("day");
+                var listed = document.createElement("ul");
+                forecastDay.append(listed);
+                var date = document.createElement("li");
+                date.textContent = dayjs().add(i, "day").format("MMM D, YYYY");
+                listed.append(date);
+                var temp = document.createElement("li");
+                temp.textContent = "Temp: " + data.list[8*i].main.temp + "'F";
+                listed.append(temp);
+                var wind = document.createElement("li");
+                wind.textContent = "Wind: " + data.list[8*i].wind.speed + "mph";
+                listed.append(wind);
+                var humidity = document.createElement("li");
+                humidity.textContent = "Humidity: " + data.list[8*i].main.humidity + "%";
+                listed.append(humidity);
+                $(".five-day-forecast").append(forecastDay);
+            }
+        })
 }
 
