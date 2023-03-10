@@ -11,8 +11,6 @@ var savedData = "";
 saveBtns();
 $(".search-btn").on("click", getWeatherData);
 
-
-
 function getWeatherData() {
     var inputCity = $('input[name="search-input"]').val();
     if (!inputCity) {
@@ -57,9 +55,7 @@ function getWeatherData() {
             button.setAttribute("lat", lat);
             button.setAttribute("lon", lon);
             cityList.append(button);
-            // for the listed items
-            listBtn = $(".list-btn");
-            listBtn.on("click", savedWeather);
+            
             // sets the large display of current date and local time
             currentCity.textContent = data.name + " - " + newtoday;
             temp.textContent = "Temperature: " + data.main.feels_like + " Degree";
