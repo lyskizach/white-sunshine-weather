@@ -11,7 +11,6 @@ var svdwthr = document.getElementById("five-day-forecast");
 
 // localStorage.clear();
 
-// saveBtns();
 loadSavedCitiesBtn();
 $(".search-btn").on("click", getWeatherData);
 
@@ -56,13 +55,20 @@ function getWeatherData() {
             var button = document.createElement("button");
             button.textContent = data.name;
             //local storage cities //
-            var cities = JSON.parse(localStorage.getItem("cities"));
+            cities = JSON.parse(localStorage.getItem("cities"));
             if(!cities) {
-                cities = data.name;
+                var cities = {};
+                cities[0] = data.name;
+                cities[1] = lat;
+                cities[2] = lon;
+                localStorage.setItem("cities", JSON.stringify(cities));
             } else {
-                cities = cities + "?!" + data.name;
+                cities[0] = cities[0] + "?!" + data.name;
+                cities[1] = cities[1] + "?!" + lat;
+                cities[2] = cities[2] + "?!" + lon;
+                localStorage.setItem("cities", JSON.stringify(cities));
             }
-            localStorage.setItem("cities", JSON.stringify(cities));
+            // localStorage.setItem("cities", JSON.stringify(cities));
             loadSavedCitiesBtn();
 
             button.classList.add("list-btn");
@@ -140,6 +146,7 @@ function savedWeather(event) {
         // need to add a reset to clear the data!!
         // use attribute to check if the div already exists?
         .then(function (data) {
+            clearSaved();
             for(i=0; i<5; i++) {
                 var forecastDay = document.createElement("div");
                 forecastDay.classList.add("day");
@@ -161,41 +168,6 @@ function savedWeather(event) {
             }
         })
 }
-// access the local storage and create buttons upon inital load or refresh
-function saveBtns() {
-    // var cities = JSON.parse(localStorage.getItem("cities"));
-    // var citylist = cities.split("?!");
-    // console.log(citylist);
-    var city = localStorage.getItem("city");
-    var requestURL = "https://api.openweathermap.org/data/2.5/forecast?q=" + city + "&appid=362ea2014f8c6d8ee9ac4f298c7c1dca" + "&units=imperial";
-    fetch(requestURL)
-    .then(function (response) {
-        return response.json();
-    })
-    .then(function (data) {
-        var lat = data.city.coord.lat;
-        var lon = data.city.coord.lon;
-        var currentWetURL = "https://api.openweathermap.org/data/2.5/weather?lat=" + lat + "&lon=" + lon + APIKey + "&units=imperial";
-        fetch(currentWetURL)
-        .then(function (response) {
-            return response.json();
-        })
-        .then(function (data) {
-            var button = document.createElement("button");
-            button.setAttribute("lat", lat);
-            button.setAttribute("lon", lon);
-            button.textContent = data.name;
-            // localStorage.setItem("city", data.name);
-            button.classList.add("list-btn");
-            // button.setAttribute("lat", lat);
-            // button.setAttribute("lon", lon);
-            cityList.append(button);
-            listBtn = $(".list-btn");
-            listBtn.on("click", clearSaved);
-            listBtn.on("click", savedWeather);
-        })
-    })
-}
 
 function clearSaved() {
     while(svdwthr.firstChild) {
@@ -205,18 +177,25 @@ function clearSaved() {
 
 function loadSavedCitiesBtn() {
     var cities = JSON.parse(localStorage.getItem("cities"));
-    var citylist = cities;
+    if(cities) {
+    var citylist = cities[0];
+    var savedLatitudes = cities[1];
+    var savedLongitudes = cities[2];
+    savedLatitudes = savedLatitudes.split("?!");
+    savedLongitudes = savedLongitudes.split("?!");
     citylist = citylist.split("?!");
     console.log(citylist);
+    console.log(savedLatitudes);
+    console.log(savedLongitudes);
     for(i = 0; i < citylist.length; i++) {
         var button = document.createElement("button");
-            // button.setAttribute("lat", lat);
-            // button.setAttribute("lon", lon);
+            button.setAttribute("lat", savedLatitudes[i]);
+            button.setAttribute("lon", savedLongitudes[i]);
             button.textContent = citylist[i];
             button.classList.add("list-btn");
             cityList.append(button);
             listBtn = $(".list-btn");
-            listBtn.on("click", clearSaved);
             listBtn.on("click", savedWeather);
+    }
     }
 }
