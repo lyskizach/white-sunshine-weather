@@ -7,11 +7,13 @@ var wind = document.getElementById("wind");
 var humidity = document.getElementById("humidity");
 var listBtn = "";
 var savedData = "";
+var svdwthr = document.getElementById("five-day-forecast");
 
 saveBtns();
 $(".search-btn").on("click", getWeatherData);
 
 function getWeatherData() {
+    clearSaved();
     var inputCity = $('input[name="search-input"]').val();
     if (!inputCity) {
        alert("Please enter a city to search")
@@ -91,13 +93,13 @@ function getWeatherData() {
             }
         })
         
-    
     })
 
 }
 
 // displays data upon click event for saved location
 function savedWeather(event) {
+    clearSaved();
     var lat = event.target.getAttribute("lat");
     var lon = event.target.getAttribute("lon");
     var getFWetURL = "https://api.openweathermap.org/data/2.5/forecast?lat=" + lat + "&lon=" + lon + APIKey + "&units=imperial";
@@ -174,7 +176,14 @@ function saveBtns() {
             button.setAttribute("lon", lon);
             cityList.append(button);
             listBtn = $(".list-btn");
+            listBtn.on("click", clearSaved);
             listBtn.on("click", savedWeather);
         })
     })
+}
+
+function clearSaved() {
+    while(svdwthr.firstChild) {
+        svdwthr.removeChild(svdwthr.firstChild);
+    }
 }
