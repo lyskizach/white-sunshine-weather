@@ -9,7 +9,10 @@ var listBtn = "";
 var savedData = "";
 var svdwthr = document.getElementById("five-day-forecast");
 
-saveBtns();
+// localStorage.clear();
+
+// saveBtns();
+loadSavedCitiesBtn();
 $(".search-btn").on("click", getWeatherData);
 
 function getWeatherData() {
@@ -52,7 +55,16 @@ function getWeatherData() {
             // appends this button into html element
             var button = document.createElement("button");
             button.textContent = data.name;
-            localStorage.setItem("city", data.name);
+            //local storage cities //
+            var cities = JSON.parse(localStorage.getItem("cities"));
+            if(!cities) {
+                cities = data.name;
+            } else {
+                cities = cities + "?!" + data.name;
+            }
+            localStorage.setItem("cities", JSON.stringify(cities));
+            loadSavedCitiesBtn();
+
             button.classList.add("list-btn");
             button.setAttribute("lat", lat);
             button.setAttribute("lon", lon);
@@ -151,6 +163,9 @@ function savedWeather(event) {
 }
 // access the local storage and create buttons upon inital load or refresh
 function saveBtns() {
+    // var cities = JSON.parse(localStorage.getItem("cities"));
+    // var citylist = cities.split("?!");
+    // console.log(citylist);
     var city = localStorage.getItem("city");
     var requestURL = "https://api.openweathermap.org/data/2.5/forecast?q=" + city + "&appid=362ea2014f8c6d8ee9ac4f298c7c1dca" + "&units=imperial";
     fetch(requestURL)
@@ -170,10 +185,10 @@ function saveBtns() {
             button.setAttribute("lat", lat);
             button.setAttribute("lon", lon);
             button.textContent = data.name;
-            localStorage.setItem("city", data.name);
+            // localStorage.setItem("city", data.name);
             button.classList.add("list-btn");
-            button.setAttribute("lat", lat);
-            button.setAttribute("lon", lon);
+            // button.setAttribute("lat", lat);
+            // button.setAttribute("lon", lon);
             cityList.append(button);
             listBtn = $(".list-btn");
             listBtn.on("click", clearSaved);
@@ -185,5 +200,23 @@ function saveBtns() {
 function clearSaved() {
     while(svdwthr.firstChild) {
         svdwthr.removeChild(svdwthr.firstChild);
+    }
+}
+
+function loadSavedCitiesBtn() {
+    var cities = JSON.parse(localStorage.getItem("cities"));
+    var citylist = cities;
+    citylist = citylist.split("?!");
+    console.log(citylist);
+    for(i = 0; i < citylist.length; i++) {
+        var button = document.createElement("button");
+            // button.setAttribute("lat", lat);
+            // button.setAttribute("lon", lon);
+            button.textContent = citylist[i];
+            button.classList.add("list-btn");
+            cityList.append(button);
+            listBtn = $(".list-btn");
+            listBtn.on("click", clearSaved);
+            listBtn.on("click", savedWeather);
     }
 }
