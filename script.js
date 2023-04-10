@@ -10,7 +10,6 @@ var savedData = "";
 var svdwthr = document.getElementById("five-day-forecast");
 
 // localStorage.clear();
-
 loadSavedCitiesBtn();
 $(".search-btn").on("click", getWeatherData);
 
@@ -69,7 +68,7 @@ function getWeatherData() {
                 localStorage.setItem("cities", JSON.stringify(cities));
             }
             // localStorage.setItem("cities", JSON.stringify(cities));
-            loadSavedCitiesBtn();
+            // loadSavedCitiesBtn();
 
             button.classList.add("list-btn");
             button.setAttribute("lat", lat);
@@ -184,9 +183,9 @@ function loadSavedCitiesBtn() {
     savedLatitudes = savedLatitudes.split("?!");
     savedLongitudes = savedLongitudes.split("?!");
     citylist = citylist.split("?!");
-    console.log(citylist);
-    console.log(savedLatitudes);
-    console.log(savedLongitudes);
+    // console.log(citylist);
+    // console.log(savedLatitudes);
+    // console.log(savedLongitudes);
     for(i = 0; i < citylist.length; i++) {
         var button = document.createElement("button");
             button.setAttribute("lat", savedLatitudes[i]);
