@@ -175,6 +175,7 @@ function clearSaved() {
 }
 
 function loadSavedCitiesBtn() {
+    clearSaved();
     var cities = JSON.parse(localStorage.getItem("cities"));
     if(cities) {
     var citylist = cities[0];
